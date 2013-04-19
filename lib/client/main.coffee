@@ -1,2 +1,2 @@
-require ['hello/hello.js'], (hello)->
-	hello.render("#simulator")
+require ['planet/planet'], (planet)->
+	planet.render("#simulator")
