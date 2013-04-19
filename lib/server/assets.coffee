@@ -10,12 +10,12 @@ Router = (root = ".")->
 	# Helper function to load the text of a file, passing it back to a callback.
 	_get = (path, cb)->
 		logger.debug "Looking for #{path}"
-		try
-			fs.readFile path, (err, file)->
+		fs.readFile path, (err, file)->
+			try
 				cb file.toString(), err # toString it, since many of the compilers don't like buffers.
-		catch err # Something wrong with the read. Save the error for a tick, don't want to get both sync and async behavior.
-			process.nextTick ->
-				cb "", err
+			catch err # Something wrong with the read. Save the error for a tick, don't want to get both sync and async behavior.
+				process.nextTick ->
+					cb "", err
 
 	# General error handler, returning the 404 image when there are problems.
 	_404 = (res, err)->
@@ -48,6 +48,7 @@ Router = (root = ".")->
 					res.status(500).sendfile("#{__dirname}/assets/errors/500.jpg")
 					logger.warn "Error compiling #{localpath}"
 					logger.debug err
+
 		else
 			file = "#{root}/#{all}".replace /\/+/, '/'
 			logger.debug "Sending #{file}"
