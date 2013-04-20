@@ -1,5 +1,5 @@
 define ["util/vec"], (vec)->
-	Sphere: (texture, radius, atmo)->
+	Sphere: (radius, texture, bump, clouds)->
 		# set up the sphere vars
 		segments = 16 * 6
 		rings = 16 * 2
@@ -7,16 +7,17 @@ define ["util/vec"], (vec)->
 		planet = new THREE.Object3D()
 
 		surfaceMaterial = new THREE.MeshPhongMaterial map: THREE.ImageUtils.loadTexture texture
+		surfaceMaterial.bumpMap = THREE.ImageUtils.loadTexture bump unless not bump
 		surface = new THREE.Mesh new THREE.SphereGeometry(radius, segments, rings), surfaceMaterial
 
-		atmoMaterial = new THREE.MeshNormalMaterial color: atmo, opacity: 0.1
-		atmo = new THREE.Mesh new THREE.SphereGeometry(radius * 1.1, segments, rings), atmoMaterial
+		cloudMaterial = new THREE.MeshPhongMaterial color: 0xFFFFFF
 
-		planet.add atmo
+
 		planet.add surface
 
 		planet.update = (t)->
-			s = 0.005 * t
+			s = 0.002 * t
 			surface.rotation = vec 0, s, 0
 
 		planet
+

@@ -1,8 +1,7 @@
 define ["util/vec", "planet/geometry", "planet/galaxy"], (vec, Geometry, Galaxy)->
-	(camera)->
+	(camera, base)->
 		scene = new THREE.Scene()
 
-		base = 50
 		radii = 
 			Earth: 1
 			Venus: 0.9504
@@ -10,14 +9,14 @@ define ["util/vec", "planet/geometry", "planet/galaxy"], (vec, Geometry, Galaxy)
 
 		venus = Geometry.Sphere "planet/textures/ven0aaa2.jpg", base * radii.Venus, 0x00E0E0
 		mars = Geometry.Sphere "planet/textures/mar0kuu2.jpg", base * radii.Mars, 0xE00000
-		earth = Geometry.Sphere "planet/textures/ear0xuu2.jpg", base * radii.Earth, 0x0000EE
+		earth = Geometry.Sphere "https://s3.amazonaws.com/sns_assets/planet/textures/earth_day_large.jpg", base * radii.Earth, 0x0000EE, "https://s3.amazonaws.com/sns_assets/planet/textures/earth_bump.jpg"
 
 		earth.position = vec 0, 0, 0
 		venus.position = vec base * 2.5, 0, 0
 		mars.position = vec base * 1.75, 0, base * 1.75
 
-		scene.add venus
-		scene.add mars
+		#scene.add venus
+		#scene.add mars
 		scene.add earth
 
 		planets = [earth, mars, venus]

@@ -1,13 +1,15 @@
 define [], ()->
 	->
 		urls = [
-			"planet/textures/sky/pos-x.png"
-			"planet/textures/sky/pos-y.png"
-			"planet/textures/sky/neg-x.png"
-			"planet/textures/sky/neg-y.png"
+			"https://s3.amazonaws.com/sns_assets/planet/textures/sky/0001.png"
+			"https://s3.amazonaws.com/sns_assets/planet/textures/sky/0003.png"
 
-			"planet/textures/sky/pos-z.png"
-			"planet/textures/sky/neg-z.png"
+			"https://s3.amazonaws.com/sns_assets/planet/textures/sky/0006.png"
+			"https://s3.amazonaws.com/sns_assets/planet/textures/sky/0005.png"
+
+			"https://s3.amazonaws.com/sns_assets/planet/textures/sky/0002.png"
+			"https://s3.amazonaws.com/sns_assets/planet/textures/sky/0004.png"
+
 		]
 
 		cubemap = THREE.ImageUtils.loadTextureCube urls

@@ -5,10 +5,11 @@ define ["util/camera", "util/renderer", "planet/scene"], (Camera, Renderer, Scen
 		# set the scene size
 		WIDTH = $container.width()
 		HEIGHT = $container.height()
+		BASE = 50
 
-		camera = Camera HEIGHT, WIDTH
+		camera = Camera HEIGHT, WIDTH, BASE
 		renderer = Renderer HEIGHT, WIDTH
-		scene = Scene camera
+		scene = Scene camera, BASE
 
 		# attach the render-supplied DOM element
 		$container.append renderer.domElement

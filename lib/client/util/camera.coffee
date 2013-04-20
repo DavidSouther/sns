@@ -1,20 +1,19 @@
 define ["util/vec"], (vec)->
-	(height, width)->
+	(height, width, base = 10)->
 		# set some camera attributes
 		VIEW_ANGLE = 45
 		ASPECT = width / height
 		NEAR = 0.1
-		FAR = 10000
+		FAR = 100000
 
-		camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR)
+		camera = new THREE.PerspectiveCamera VIEW_ANGLE, ASPECT, NEAR, FAR
 
-		# the camera starts at 0,0,0 so pull it back
-		camera.position.z = 300
+		altitude = (1 + 0.062) * base
 
 		camera.update = (t)->
-			s = t * -0.005;
-			camera.position.x = 500 * Math.sin s
-			camera.position.z = 800 * Math.cos s
-			camera.lookAt vec 0, 0, 0
+			s = t * -0.0005;
+			camera.position.x = altitude * Math.cos s
+			camera.position.z = altitude * Math.sin s
+			camera.rotation = vec 0, -s + 0.4, 0
 
 		camera
