@@ -1,4 +1,4 @@
-define ["util/vec", "planet/geometry"], (vec, Geometry)->
+define ["util/vec", "planet/geometry", "planet/galaxy"], (vec, Geometry, Galaxy)->
 	(camera)->
 		scene = new THREE.Scene()
 
@@ -8,9 +8,9 @@ define ["util/vec", "planet/geometry"], (vec, Geometry)->
 			Venus: 0.9504
 			Mars: 0.5318
 
-		venus = Geometry.Sphere "planet/textures/ven0aaa2.jpg", base * radii.Venus
-		mars = Geometry.Sphere "planet/textures/mar0kuu2.jpg", base * radii.Mars
-		earth = Geometry.Sphere "planet/textures/ear0xuu2.jpg", base * radii.Earth
+		venus = Geometry.Sphere "planet/textures/ven0aaa2.jpg", base * radii.Venus, 0x00E0E0
+		mars = Geometry.Sphere "planet/textures/mar0kuu2.jpg", base * radii.Mars, 0xE00000
+		earth = Geometry.Sphere "planet/textures/ear0xuu2.jpg", base * radii.Earth, 0x0000EE
 
 		earth.position = vec 0, 0, 0
 		venus.position = vec base * 2.5, 0, 0
@@ -22,6 +22,7 @@ define ["util/vec", "planet/geometry"], (vec, Geometry)->
 
 		planets = [earth, mars, venus]
 
+		scene.add Galaxy()
 		scene.add camera
 		scene.add new THREE.AmbientLight 0xE0E0E0
 

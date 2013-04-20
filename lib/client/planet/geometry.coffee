@@ -1,18 +1,22 @@
 define ["util/vec"], (vec)->
-	Sphere: (texture, radius)->
+	Sphere: (texture, radius, atmo)->
 		# set up the sphere vars
 		segments = 16 * 6
 		rings = 16 * 2
 
-		sphereMaterial = new THREE.MeshPhongMaterial
-			map: THREE.ImageUtils.loadTexture texture
+		planet = new THREE.Object3D()
 
-		# create a new mesh with sphere geometry -
-		# we will cover the sphereMaterial next!
-		sphere = new THREE.Mesh new THREE.SphereGeometry(radius, segments, rings), sphereMaterial
+		surfaceMaterial = new THREE.MeshPhongMaterial map: THREE.ImageUtils.loadTexture texture
+		surface = new THREE.Mesh new THREE.SphereGeometry(radius, segments, rings), surfaceMaterial
 
-		sphere.update = (t)->
+		atmoMaterial = new THREE.MeshNormalMaterial color: atmo, opacity: 0.1
+		atmo = new THREE.Mesh new THREE.SphereGeometry(radius * 1.1, segments, rings), atmoMaterial
+
+		planet.add atmo
+		planet.add surface
+
+		planet.update = (t)->
 			s = 0.005 * t
-			sphere.rotation = vec 0, s, 0
+			surface.rotation = vec 0, s, 0
 
-		sphere
+		planet
