@@ -14,10 +14,10 @@ define ["util/camera", "util/renderer", "planet/scene"], (Camera, Renderer, Scen
 		# attach the render-supplied DOM element
 		$container.append renderer.domElement
 
-		frame = 0
+		clock = new THREE.Clock()
 		do update = ()->
 			requestAnimationFrame update
-			frame += 1
-			scene.update frame
+			t = clock.getElapsedTime()
+			scene.update t
 			# draw!
 			renderer.render scene, camera
