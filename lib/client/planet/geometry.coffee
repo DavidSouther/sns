@@ -12,7 +12,6 @@ define ["util/vec"], (vec)->
 
 		cloudMaterial = new THREE.MeshPhongMaterial color: 0xFFFFFF
 
-
 		planet.add surface
 
 		planet.update = (t)->

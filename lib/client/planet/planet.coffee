@@ -12,7 +12,7 @@ define ["util/camera", "util/renderer", "util/vec", "util/orbit", "planet/scene"
 
 		camera = Camera HEIGHT, WIDTH, orbit
 		renderer = Renderer HEIGHT, WIDTH
-		scene = Scene camera, BASE
+		scene = Scene camera, BASE, orbit
 
 		# attach the render-supplied DOM element
 		$container.append renderer.domElement

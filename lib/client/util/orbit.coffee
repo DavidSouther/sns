@@ -18,10 +18,7 @@ define ["util/vec"], (vec)->
 			r = N / q
 			pos = vec(r * x, 0, r * y).applyEuler(reference)
 
-			drn = N * 
-			drq = 1 + (orbit.eccentricity * x)
-			dr = drn / (drq * drq)
-			pos.velocity = vec(dr * -x, 0, dr * (y + orbit.eccentricity))
+			# Cheat on the velocity vector by calling closed with a step
 
 			pos
 		closed

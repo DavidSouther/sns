@@ -12,8 +12,7 @@ define ["util/vec"], (vec)->
 			s = t * 0.1;
 			position = orbit(s)
 			camera.position = position.clone()
-			target = position.clone().add(position.velocity)
-			camera.lookAt target
+			camera.lookAt orbit(s + 1)
 			# console.log target
 
 		camera

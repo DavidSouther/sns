@@ -1,5 +1,5 @@
-define ["util/vec", "planet/geometry", "planet/galaxy"], (vec, Geometry, Galaxy)->
-	(camera, base)->
+define ["util/vec", "planet/geometry", "planet/galaxy", "planet/orbital"], (vec, Geometry, Galaxy, Orbital)->
+	(camera, base, orbit)->
 		scene = new THREE.Scene()
 
 		radii = 
@@ -18,6 +18,7 @@ define ["util/vec", "planet/geometry", "planet/galaxy"], (vec, Geometry, Galaxy)
 		#scene.add venus
 		#scene.add mars
 		scene.add earth
+		scene.add Orbital orbit
 
 		planets = [earth]
 
