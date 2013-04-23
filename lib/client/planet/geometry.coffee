@@ -2,7 +2,7 @@ define ["util/vec"], (vec)->
 	Sphere: (radius, texture, bump, clouds)->
 		# set up the sphere vars
 		segments = 16 * 6
-		rings = 16 * 2
+		rings = 16 * 4
 
 		planet = new THREE.Object3D()
 
