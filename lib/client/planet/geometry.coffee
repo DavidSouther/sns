@@ -1,4 +1,4 @@
-define ["util/vec"], (vec)->
+define [], ()->
 	Sphere: (radius, texture, bump, clouds)->
 		# set up the sphere vars
 		segments = 16 * 6
@@ -15,7 +15,7 @@ define ["util/vec"], (vec)->
 		planet.add surface
 
 		planet.update = (t)->
-			s = 0.002 * t
+			s = 0.06 * t
 			surface.rotation = vec 0, s, 0
 
 		planet
