@@ -1,6 +1,12 @@
 define [], ()->
-	(height, width)->
+	(stage)->
 		renderer = new THREE.WebGLRenderer()
-		# start the renderer
-		renderer.setSize width, height
+		renderer.resize = ->
+			# start the renderer
+			renderer.setSize stage.width, stage.height
+
+		_render = renderer.render
+		renderer.render = ->
+			_render.call renderer, stage.scene, stage.camera
+
 		renderer
