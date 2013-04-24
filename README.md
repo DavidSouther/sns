@@ -2,7 +2,8 @@
 
 Take command of a Stellar Naval Vessel (SNV) in a universe with physics from the CoDominium universe. Manage navigation, weapons, science, and more as you lead your crew on various missions ranging from military engagements to interstellar diplomacy to scientific exploration. Earn your place in the admiralty and take on larger missions, eventually controlling armadas and fleets at a galactic level.
 
-https://gist.github.com/DavidSouther/5390171
+
+For more information, read through the [design docs](https://gist.github.com/DavidSouther/5390171).
 
 ## Running
 
