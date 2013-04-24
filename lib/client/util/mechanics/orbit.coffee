@@ -1,4 +1,4 @@
-define ["util/vec"], (vec)->
+define [], ()->
 	# body has .reference (vec3 identity)
 	# body, craft have .mass (scalar)
 	# craft has velocity

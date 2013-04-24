@@ -1,4 +1,4 @@
-define ["util/vec"], (vec)->
+define [], ()->
 	Orbital = (orbit, start = 0, stop = 100, step = 1)->
 		orbital = 
 			geometry: new THREE.Geometry()
