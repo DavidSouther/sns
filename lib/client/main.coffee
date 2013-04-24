@@ -1,2 +1,4 @@
-require ['planet/planet'], (planet)->
-	planet.render("#simulator")
+stage = 'ship'
+
+require ["#{stage}/stage"], (stage)->
+	stage.play("#simulator")
