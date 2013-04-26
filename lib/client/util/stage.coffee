@@ -3,7 +3,7 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 		$container = $ selector
 
 		prep = ->
-			do size = ->
+			do size = =>
 				@width = $container.width()
 				@height = $container.height()
 				@aspect = @width / @height
@@ -14,6 +14,7 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 				@renderer.resize()
 
 			@camera = Camera @
+			@controls = new THREE.TrackballControls @camera
 			@renderer = Renderer @
 
 			@scene = new THREE.Scene()
@@ -21,6 +22,7 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 
 			$container.trigger 'resize'
 
+			frame = 0
 			clock = new THREE.Clock()
 			do update = =>
 				requestAnimationFrame update
@@ -28,8 +30,13 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 				if @running
 					stats.begin()
 
-					t = clock.getElapsedTime()
-					@scene.update t
+					tick = 
+						delta: clock.getDelta()
+						time: clock.getElapsedTime()
+						frame: frame += 1
+
+					@scene.update tick
+					@controls.update()
 
 					@renderer.render()
 
