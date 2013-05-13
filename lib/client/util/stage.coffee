@@ -11,7 +11,7 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 
 			# Set up the render pipeline
 			@camera = Camera @
-			@controls = new THREE.TrackballControls @camera
+			# @controls = new THREE.TrackballControls @camera
 			@renderer = Renderer @
 
 			$container.on 'resize', resize = =>
@@ -44,7 +44,7 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 						console.log "Frame clean entering..."
 
 					@scene.update tick
-					@controls.update()
+					# @controls.update()
 					@renderer.render()
 
 					if window.debug
