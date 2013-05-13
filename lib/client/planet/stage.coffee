@@ -1,5 +1,6 @@
 define ["util/stage", "util/mechanics/orbit", "planet/geometry", "planet/galaxy", "util/mechanics/orbital", "ship/ship"],
 	(Stage, Orbit, Geometry, Galaxy, Orbital, Ship)->
+		controls = update: ->
 		setUp = (stage, base, orbit)->
 			scene = stage.scene
 
@@ -22,12 +23,15 @@ define ["util/stage", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 			scene.addShip = (ship)->
 				scene.add ship
 				stage.ships.push ship
+				controls.chase = ship
 			Ship.load scene, orbit
 
 			scene.update = (t)->
 				stage.camera.update t
 				(planet.update t for planet in stage.planets)
 				(ship.update t for ship in stage.ships)
+
+			controls = new THREE.ChaseControls stage.camera, stage.container
 
 		play: (selector)->
 			stage = Stage selector
@@ -38,11 +42,7 @@ define ["util/stage", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 			orbit = Orbit({reference: vec(1, 0, 0)}, null, Orbit.parts(0.4, altitude, 0.2, 0.5, 0.1))
 
 			update = (t)->
-				position = orbit(t.time * 0.1)
-				velocity = orbit((t.time * 0.1) + 0.1)
-				@position = position.clone().multiplyScalar(1.02)
-				@lookAt position
-				@lookAt vec 0, 0, 0
+				controls.update()
 			stage.camera.update = _(update).bind stage.camera
 
 			setUp stage, BASE, orbit
