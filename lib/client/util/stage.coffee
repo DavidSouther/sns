@@ -1,5 +1,6 @@
 define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)->
 	Stage = (selector)->
+		FPS = 1
 		$container = $ selector
 
 		prep = ->
@@ -18,6 +19,7 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 				@camera.resize()
 				@renderer.resize()
 			$container.trigger 'resize'
+			@container = $container[0]
 
 			# Prep the THREE scene, including an update function, for game state
 			@scene = new THREE.Scene()
@@ -50,7 +52,7 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 						console.log "Frame clean exiting."
 
 					stats.end()
-				requestAnimationFrame update
+				setTimeout (->requestAnimationFrame update), 1000 / FPS
 
 			@start = -> @running = yes
 			@stop = -> @running = no
