@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.65.0 runknown</authoring_tool>
     </contributor>
-    <created>2013-05-12T21:16:22</created>
-    <modified>2013-05-12T21:16:22</modified>
+    <created>2013-05-12T23:04:10</created>
+    <modified>2013-05-12T23:04:10</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -95,10 +95,24 @@
       </extra>
     </light>
   </library_lights>
-  <library_images/>
+  <library_images>
+    <image id="hull" name="hull">
+      <init_from>hull.jpg</init_from>
+    </image>
+  </library_images>
   <library_effects>
     <effect id="Material-effect">
       <profile_COMMON>
+        <newparam sid="hull-surface">
+          <surface type="2D">
+            <init_from>hull</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="hull-sampler">
+          <sampler2D>
+            <source>hull-surface</source>
+          </sampler2D>
+        </newparam>
         <technique sid="common">
           <phong>
             <emission>
@@ -108,7 +122,7 @@
               <color sid="ambient">1 1 1 1</color>
             </ambient>
             <diffuse>
-              <color sid="diffuse">0.64 0.64 0.64 1</color>
+              <texture texture="hull-sampler" texcoord="UVMap"/>
             </diffuse>
             <specular>
               <color sid="specular">0.5 0.5 0.5 1</color>
