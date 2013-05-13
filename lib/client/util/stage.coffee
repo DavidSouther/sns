@@ -3,30 +3,33 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 		$container = $ selector
 
 		prep = ->
+			# Resize the stage to the current container bounds
 			do size = =>
 				@width = $container.width()
 				@height = $container.height()
 				@aspect = @width / @height
 
-			$container.on 'resize', resize = =>
-				size()
-				@camera.resize()
-				@renderer.resize()
-
+			# Set up the render pipeline
 			@camera = Camera @
 			@controls = new THREE.TrackballControls @camera
 			@renderer = Renderer @
 
+			$container.on 'resize', resize = =>
+				size()
+				@camera.resize()
+				@renderer.resize()
+			$container.trigger 'resize'
+
+			# Prep the THREE scene, including an update function, for game state
 			@scene = new THREE.Scene()
 			@scene.update = @scene.update || ->
 
-			$container.trigger 'resize'
+			window.debug = false
 
 			frame = 0
 			clock = new THREE.Clock()
+			# The render loop and render clock
 			do update = =>
-				requestAnimationFrame update
-				
 				if @running
 					stats.begin()
 
@@ -35,17 +38,24 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 						time: clock.getElapsedTime()
 						frame: frame += 1
 
+					if window.debug
+						console.log "Frame #{frame}..."
+						findNaN @scene
+						console.log "Frame clean entering..."
+
 					@scene.update tick
 					@controls.update()
-
 					@renderer.render()
 
-					stats.end()
+					if window.debug
+						findNaN @scene
+						console.log "Frame clean exiting."
 
-			@start = ->
-				@running = yes
-			@stop = ->
-				@running = no
+					stats.end()
+				requestAnimationFrame update
+
+			@start = -> @running = yes
+			@stop = -> @running = no
 
 			# attach the render-supplied DOM element
 			$container.append @renderer.domElement
