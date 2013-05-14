@@ -1,6 +1,6 @@
 define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)->
 	Stage = (selector)->
-		FPS = 1
+		FPS = 60
 		$container = $ selector
 
 		prep = ->

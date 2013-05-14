@@ -4,61 +4,41 @@
 THREE.ChaseControls = (object, domElement) ->
 	THREE.TrackballControls.call @, object, domElement
 	@noPan = true
-	@maxRadius = 6
+	@maxRadii = 6
 
 	_chase = new THREE.Object3D
+	_radius = 1
 	Object.defineProperty @, 'chase',
 		set: (it)->
 			throw "Not a valid 3D object" unless it.position
 			_chase = it
 			@object.position = _chase.position
-			if _chase.computeBoundingSphere
-				_chase.computeBoundingSphere()
-				@object.position.add (vec 1, 1, 1).normalize().scalarMultiply(boundRadius() * 2)
-				@minDistance = _chase.boundingSphere.radius
-				@maxDistance = _chase.boundingSphere.radius * @maxRadius
+			geom = _chase.geometry || _chase
+			if geom.computeBoundingSphere
+				geom.computeBoundingSphere()
+				_radius = geom.boundingSphere.radius * _chase.scale.x
+				@minDistance = _radius
+				@maxDistance = _radius * @maxRadii
 		get: -> _chase
 
-	boundRadius = ->
-		_chase.computeBoundingSphere() if _chase.computeBoundingSphere unless _chase.boundingSphere
-		radius = _chase.boundingSphere?.radius || 1
-		radius
+	@checkDistances = ->
+		@eye.setLength(@maxDistance)  if @eye.lengthSq() > @maxDistance * @maxDistance
+		@eye.setLength(@minDistance)  if @eye.lengthSq() < @minDistance * @minDistance
 
-	@zoomCamera = ->
-		if @_priv.state is THREE.TrackballControls.STATE.TOUCH_ZOOM
-			factor = @_priv.touchZoomDistanceStart / @_priv.touchZoomDistanceEnd
-			@_priv.touchZoomDistanceStart = @_priv.touchZoomDistanceEnd
-		else
-			factor = 1.0 + (@_priv.zoomEnd.y - @_priv.zoomStart.y) * @zoomSpeed
-			if factor isnt 1.0 and factor > 0.0
-				if @staticMoving
-					@_priv.zoomStart.copy @_priv.zoomEnd
-				else
-					@_priv.zoomStart.y += (@_priv.zoomEnd.y - @_priv.zoomStart.y) * @dynamicDampingFactor
-		factor
-
+	oldPosition = @chase.position.clone()
 	@update = =>
-		# _update.apply @
-		bounds = boundRadius()
-		distance = bounds
+		@target = @chase.position.clone()
+		@eye.subVectors oldPosition, @target
+		oldPosition = @chase.position.clone()
+		
+		@rotateCamera()  unless @noRotate
+		@zoomCamera()  unless @noZoom
+		@panCamera()  unless @noPan
+		@checkDistances()
 
-		# Point trail in correct direction...
-		trail = vec(-1, 0.5, 0.5).normalize()
-		# # Scale distance on zoom level
-		distance *= @zoomCamera()
-		# console.log distance
-		trail.multiplyScalar distance
+		@object.position.addVectors @target, @eye
 
-		# Constrain within distance bounds
-		l = trail.length()
-		trail.length(@minDistance) if l < @minDistance
-		trail.length(@maxDistance) if l > @maxDistance
-
-		@object.position = @chase.position.clone().add trail
-		console.log trail
-
-		@object.lookAt @chase.position
-		# @object.up = @chase.up
+		@object.lookAt @target
 
 	@
 
