@@ -18,7 +18,7 @@ define ["util/stage", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 
 			scene.add Galaxy()
 			scene.add new THREE.AmbientLight 0xE0E0E0
-			scene.add Orbital orbit, 0, 2 * Math.PI, 0.01
+			scene.add Orbital orbit, 0, 2 * Math.PI, Math.PI / 30
 
 			scene.addShip = (ship)->
 				scene.add ship
