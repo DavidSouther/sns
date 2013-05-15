@@ -35,6 +35,14 @@ define ["util/stage", "game/clock", "util/mechanics/orbit", "planet/geometry", "
 
 			controls = new THREE.ChaseControls stage.camera, stage.container
 
+			$ ->
+				cf = dat.addFolder "Follow"
+				follow =
+					ship: -> controls.chase = stage.ships[0]
+					earth: -> controls.chase = earth
+				cf.add follow, 'ship'
+				cf.add follow, 'earth'
+
 		play: (selector)->
 			stage = Stage selector
 

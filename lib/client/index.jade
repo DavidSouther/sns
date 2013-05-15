@@ -3,14 +3,22 @@ html(lang="en")
 	head
 		title Stellar Naval Simulator
 		link(rel="stylesheet", href="util/simulator.css")
+
 		script(src="vendor/underscore.js")
 		script(src="vendor/zepto.js")
+
+		script(src="vendor/dat.gui.js")
+		script
+			$(function(){window.dat = new dat.GUI();})
+
 		script(src="vendor/three.js")
 		script(src="vendor/detector.js")
 		script(src="vendor/stats.js")
-		script(src="vendor/three/controls/Trackball.js")
-		script(src="util/three/controls/Chase.js")
+
 		script(src="vendor/three/loaders/Collada.js")
+		script(src="vendor/three/controls/Trackball.js")
+
+		script(src="util/three/controls/Chase.js")
 		script(src="util/mathematics/vec.js")
 		script(src="util/findNaN.js")
 		script(data-main="main.js", src="vendor/require.js")
