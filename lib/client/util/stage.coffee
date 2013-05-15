@@ -1,4 +1,4 @@
-define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)->
+define ["util/camera", "util/renderer", "game/clock", "util/stats"], (Camera, Renderer, Clock, stats)->
 	Stage = (selector)->
 		FPS = 60
 		$container = $ selector
@@ -25,31 +25,16 @@ define ["util/camera", "util/renderer", "util/stats"], (Camera, Renderer, stats)
 			@scene = new THREE.Scene()
 			@scene.update = @scene.update || ->
 
-			window.debug = false
-
-			frame = 0
-			clock = new THREE.Clock()
+			clock = Clock()
 			# The render loop and render clock
 			do update = =>
 				if @running
 					stats.begin()
 
-					tick = 
-						delta: clock.getDelta()
-						time: clock.getElapsedTime()
-						frame: frame += 1
+					clock.tick()
 
-					if window.debug
-						console.log "Frame #{frame}..."
-						findNaN @scene
-						console.log "Frame clean entering..."
-
-					@scene.update tick
+					@scene.update clock
 					@renderer.render()
-
-					if window.debug
-						findNaN @scene
-						console.log "Frame clean exiting."
 
 					stats.end()
 				setTimeout (->requestAnimationFrame update), 1000 / FPS
