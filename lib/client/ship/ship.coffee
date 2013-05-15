@@ -9,9 +9,11 @@ define [], ()->
 					mat = new THREE.Matrix4()
 					mesh.scale = vec 0.01, 0.01, 0.01
 
-					mesh.update = (t)->
-						position = orbit(t.time * 0.1)
-						velocity = orbit((t.time + t.delta) * 0.1)
+					mesh.update = (clock)->
+						time = clock.time
+						delta = clock.delta
+						position = orbit time
+						velocity = orbit (time + delta)
 						mesh.position = position
 
 						# Point the top of the ship back at the planet

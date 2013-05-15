@@ -1,4 +1,4 @@
 stage = 'planet'
 
-require ["#{stage}/stage"], (stage)->
+require ["#{stage}/level"], (stage)->
 	stage.play("#simulator")

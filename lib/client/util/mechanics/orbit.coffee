@@ -8,9 +8,11 @@ define [], ()->
 		reference = body.reference.clone().applyEuler(vec(-orbit.periapsis, orbit.inclination, -orbit.longitude), "zxz")
 		eccentricitySquared = orbit.eccentricity * orbit.eccentricity
 		N = orbit.semimajor * (1 - eccentricitySquared)
+		velocity = (2 * Math.PI) / (orbit.period * 60)
 
 		closed = (t)->
 			s = t
+			s = t * velocity
 			y = Math.cos s
 			x = Math.sin s
 
@@ -29,11 +31,9 @@ define [], ()->
 	# Inclination: angle N of due east on equator at epoch.
 	# Longitude: angle Longitude East of reference on equator.
 	# Periapsis: angle along orbit at epoch (follow inclination from longitude.)
-	Orbit.parts = (eccentricity, altitude, inclination, longitude, periapsis)->
-		eccentricity: eccentricity
-		semimajor: altitude / (1 - eccentricity)
-		inclination: inclination
-		longitude: longitude
-		periapsis: periapsis
+	# Perior: time in (game) minutes to complete one orbit
+	Orbit.parts = (eccentricity, altitude, inclination, longitude, periapsis, period = 90)->
+		semimajor = altitude / (1 - eccentricity)
+		{eccentricity, semimajor, inclination, longitude, periapsis, period}
 
 	Orbit

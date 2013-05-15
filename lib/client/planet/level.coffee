@@ -1,8 +1,9 @@
-define ["util/stage", "util/mechanics/orbit", "planet/geometry", "planet/galaxy", "util/mechanics/orbital", "ship/ship"],
-	(Stage, Orbit, Geometry, Galaxy, Orbital, Ship)->
+define ["util/stage", "game/clock", "util/mechanics/orbit", "planet/geometry", "planet/galaxy", "util/mechanics/orbital", "ship/ship"],
+	(Stage, Clock, Orbit, Geometry, Galaxy, Orbital, Ship)->
 		controls = update: ->
 		setUp = (stage, base, orbit)->
-			scene = stage.scene
+			scene = stage.scene = new THREE.Scene
+			clock = new Clock
 
 			radii = 
 				Earth: 1
@@ -18,7 +19,7 @@ define ["util/stage", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 
 			scene.add Galaxy()
 			scene.add new THREE.AmbientLight 0xE0E0E0
-			scene.add Orbital orbit, 0, 2 * Math.PI, Math.PI / 30
+			scene.add Orbital orbit, 0, 90 * 60 * 2 * Math.PI, 9 * 6
 
 			scene.addShip = (ship)->
 				scene.add ship
@@ -26,10 +27,11 @@ define ["util/stage", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 				controls.chase = ship
 			Ship.load scene, orbit
 
-			scene.update = (t)->
-				stage.camera.update t
-				(planet.update t for planet in stage.planets)
-				(ship.update t for ship in stage.ships)
+			clock.addEventListener 'tick', (event)->
+				clock = event.clock
+				(planet.update clock for planet in stage.planets)
+				(ship.update clock for ship in stage.ships)
+				controls.update()
 
 			controls = new THREE.ChaseControls stage.camera, stage.container
 
@@ -40,10 +42,7 @@ define ["util/stage", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 
 			altitude = (1 + 0.062) * BASE
 			orbit = Orbit({reference: vec(1, 0, 0)}, null, Orbit.parts(0.4, altitude, 0.2, 0.5, 0.1))
-
-			update = (t)->
-				controls.update()
-			stage.camera.update = _(update).bind stage.camera
+			stage.camera.position = vec 55, 0, 0
 
 			setUp stage, BASE, orbit
 

@@ -21,19 +21,11 @@ define ["util/camera", "util/renderer", "game/clock", "util/stats"], (Camera, Re
 			$container.trigger 'resize'
 			@container = $container[0]
 
-			# Prep the THREE scene, including an update function, for game state
-			@scene = new THREE.Scene()
-			@scene.update = @scene.update || ->
-
-			clock = Clock()
 			# The render loop and render clock
 			do update = =>
 				if @running
 					stats.begin()
 
-					clock.tick()
-
-					@scene.update clock
 					@renderer.render()
 
 					stats.end()
