@@ -1,4 +1,4 @@
-define ["util/camera", "util/renderer", "util/vec", "util/orbit", "planet/scene"], (Camera, Renderer, vec, Orbit, Scene)->
+define ["util/camera", "util/renderer", "util/orbit", "planet/scene"], (Camera, Renderer, Orbit, Scene)->
 	render: (selector)->
 		$container = $ selector
 

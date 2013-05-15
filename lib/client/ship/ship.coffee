@@ -1,8 +1,8 @@
 define [], ()->
 	loader = new THREE.ColladaLoader()
 	loader.options.convertUpAxis = true;
-	load: (stage, orbit)->
-		collada = "ship/frigate/frigate.dae"
+	load: (stage, orbit, ship = "frigate")->
+		collada = "ship/#{ship}/#{ship}.dae"
 		loader.load collada, ( scene )->
 			for mesh in scene.scene.children when mesh instanceof THREE.Mesh
 				do (mesh)->
