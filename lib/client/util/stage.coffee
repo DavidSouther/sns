@@ -14,7 +14,7 @@ define ["util/camera", "util/renderer", "game/clock", "util/stats"], (Camera, Re
 			@camera = Camera @
 			@renderer = Renderer @
 
-			$container.on 'resize', resize = =>
+			$(window).on 'resize', resize = =>
 				size()
 				@camera.resize()
 				@renderer.resize()
