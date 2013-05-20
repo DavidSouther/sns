@@ -1,14 +1,17 @@
 define [], ()->
-	Orbital = (orbit, start = 0, stop = 100, step = 1)->
-		orbital = 
+	tau = 2 * Math.PI
+	hundredth_tau = tau / 100
+	Orbital = (orbit, start = 0, stop = tau, step = hundredth_tau, color = 0xFA1010)->
+		orbital =
 			geometry: new THREE.Geometry()
-			material: new THREE.ParticleBasicMaterial
-				color: 0xFA1010
-				size: 0.1
+			materials:
+				particle: new THREE.ParticleBasicMaterial {color, size: 0.1}
+				line: new THREE.LineBasicMaterial {color}
 
 		while start < stop
 			orbital.geometry.vertices.push orbit(start)
 			start += step
 
-		orbital.line = new THREE.ParticleSystem orbital.geometry, orbital.material
-		orbital.line
+		orbital.dots = new THREE.ParticleSystem orbital.geometry, orbital.materials.particle
+		orbital.line = new THREE.Line orbital.geometry, orbital.materials.line, THREE.LineStrip
+		orbital

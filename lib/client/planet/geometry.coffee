@@ -12,16 +12,19 @@ define [], ()->
 
 		planet.add surface
 
-		mat = new THREE.Matrix4
+		planet.timeScale = 1
+		$ ->
+			f = dat.addFolder "Planet"
+			f.add planet, 'timeScale', 0, 20
+
 		planet.update = (t)->
 			s = t.time
 			# The planet must go from 0 to 2PI in 24 * 60 * 60 game-time seconds
 			# q = (2 * Math.PI) / (24 * 60 * 60)
 			q = 0.0000727220521664304
-			s = s * q
+			s = s * q * planet.timeScale
 
-			mat.makeRotationY s
-			surface.quaternion.setFromRotationMatrix mat
+			planet.rotation = vec 0, s, 0
 
 		planet
 
