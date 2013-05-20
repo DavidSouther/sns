@@ -4,6 +4,7 @@ define [], ->
 	class Clock extends THREE.EventDispatcher
 		constructor: (@UPS = 20, @scale = 60)->
 			clock = new THREE.Clock()
+			paused = false
 
 			@frame = 0
 			@delta = 0
@@ -15,6 +16,7 @@ define [], ->
 				cf.add @, 'scale', 1, 360
 
 			tick = =>
+				return if paused
 				@frame += 1
 				@delta = clock.getDelta() * @scale
 				@time = clock.getElapsedTime() * @scale
@@ -23,3 +25,14 @@ define [], ->
 
 				setTimeout tick, 1000 / @UPS
 			tick()
+
+			@pause = ->
+				if paused
+					paused = false
+					clock.start()
+					@dispatchEvent type: 'paused', clock: @
+					tick()
+				else
+					paused = true
+					clock.stop()
+					@dispatchEvent type: 'unpaused', clock: @

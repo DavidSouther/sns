@@ -19,29 +19,32 @@ define ["util/stage", "game/clock", "util/mechanics/orbit", "planet/geometry", "
 
 			scene.add Galaxy()
 			scene.add new THREE.AmbientLight 0xE0E0E0
-			scene.add Orbital orbit, 0, 90 * 60 * 2 * Math.PI, 9 * 6
+			orbital = Orbital orbit, 0, 90 * 60 * 2 * Math.PI, 9 * 6
+			scene.add orbital.dots
+			scene.add orbital.line
 
 			scene.addShip = (ship)->
 				scene.add ship
 				stage.ships.push ship
-				controls.chase = ship
+				stage.controls?.chase = ship
 			Ship.load scene, orbit
 
 			clock.addEventListener 'tick', (event)->
 				clock = event.clock
 				(planet.update clock for planet in stage.planets)
 				(ship.update clock for ship in stage.ships)
-				controls.update()
 
-			controls = new THREE.ChaseControls stage.camera, stage.container
+			stage.controls = new THREE.ChaseControls stage.camera, stage.container
 
 			$ ->
 				cf = dat.addFolder "Follow"
 				follow =
-					ship: -> controls.chase = stage.ships[0]
-					earth: -> controls.chase = earth
+					ship: -> stage.controls?.chase = stage.ships[0]
+					earth: -> stage.controls?.chase = earth
 				cf.add follow, 'ship'
 				cf.add follow, 'earth'
+				cf = dat.addFolder "Pause"
+				cf.add clock, 'pause'
 
 		play: (selector)->
 			stage = Stage selector

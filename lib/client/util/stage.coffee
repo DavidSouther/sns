@@ -26,6 +26,7 @@ define ["util/camera", "util/renderer", "game/clock", "util/stats"], (Camera, Re
 				if @running
 					stats.begin()
 
+					@controls?.update()
 					@renderer.render()
 
 					stats.end()
