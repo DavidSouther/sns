@@ -58,12 +58,12 @@ class THREE.Trackball extends THREE.EventDispatcher
 			quaternion.setFromAxisAngle axis, -angle
 			@eye.applyQuaternion quaternion
 			# @object.up.applyQuaternion quaternion
-			# @_.rotateEnd.applyQuaternion quaternion
-			# if @staticMoving
-			# 	@_.rotateStart.copy @_.rotateEnd
-			# else
-			# 	quaternion.setFromAxisAngle axis, angle * (@dynamicDampingFactor - 1.0)
-			# 	@_.rotateStart.applyQuaternion quaternion
+			@_.rotateEnd.applyQuaternion quaternion
+			if @staticMoving
+				@_.rotateStart.copy @_.rotateEnd
+			else
+				quaternion.setFromAxisAngle axis, angle * (@dynamicDampingFactor - 1.0)
+				@_.rotateStart.applyQuaternion quaternion
 
 	zoom: ->
 		factor = 1
