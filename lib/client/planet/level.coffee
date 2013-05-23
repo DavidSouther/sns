@@ -10,7 +10,7 @@ define ["util/stage", "game/clock", "util/mechanics/orbit", "planet/geometry", "
 				Venus: 0.9504
 				Mars: 0.5318
 
-			earth = Geometry.Sphere base * radii.Earth, "https://s3.amazonaws.com/sns_assets/planet/textures/earth_day_medium.jpg", "https://s3.amazonaws.com/sns_assets/planet/textures/earth_bump.jpg"
+			earth = Geometry.Sphere base * radii.Earth, "https://s3.amazonaws.com/sns_assets/planet/textures/earth_day_4k.jpg", "https://s3.amazonaws.com/sns_assets/planet/textures/earth_bump.jpg"
 			earth.position = vec 0, 0, 0
 			scene.add earth
 
