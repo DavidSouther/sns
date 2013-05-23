@@ -16,7 +16,7 @@ class THREE.ChaseControls extends THREE.Trackball
 				throw "Not a valid 3D object" unless it.position
 				_chase = it
 				_chase.rotationAutoUpdate = true
-				@object.position = _chase.position
+				@object.position = _chase.position.clone()
 				geom = _chase.geometry || _chase
 				if geom.computeBoundingSphere
 					geom.computeBoundingSphere()
