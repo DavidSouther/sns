@@ -12,6 +12,6 @@ define [], ()->
 			orbital.geometry.vertices.push orbit(start)
 			start += step
 
-		orbital.dots = new THREE.ParticleSystem orbital.geometry, orbital.materials.particle
-		orbital.line = new THREE.Line orbital.geometry, orbital.materials.line, THREE.LineStrip
+		orbital.dots = new THREE.ParticleSystem orbital.geometry.clone(), orbital.materials.particle
+		orbital.line = new THREE.Line orbital.geometry.clone(), orbital.materials.line
 		orbital
