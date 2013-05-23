@@ -11,11 +11,10 @@ define [], ()->
 		surface = new THREE.Mesh new THREE.SphereGeometry(radius, segments, rings), surfaceMaterial
 
 		planet.add surface
+		planet.computeBoundingSphere = ->
+		planet.boundingSphere = {radius}
 
-		planet.timeScale = 1
-		$ ->
-			f = dat.addFolder "Planet"
-			f.add planet, 'timeScale', 0, 20
+		planet.timeScale = 15
 
 		planet.update = (t)->
 			s = t.time
