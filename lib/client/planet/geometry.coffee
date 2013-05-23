@@ -8,9 +8,13 @@ define [], ()->
 
 		surfaceMaterial = new THREE.MeshPhongMaterial map: THREE.ImageUtils.loadTexture texture
 		surfaceMaterial.bumpMap = THREE.ImageUtils.loadTexture bump unless not bump
-		surface = new THREE.Mesh new THREE.SphereGeometry(radius, segments, rings), surfaceMaterial
+		# surface = new THREE.Mesh new THREE.SphereGeometry(radius, segments, rings), surfaceMaterial
 
-		planet.add surface
+		latLngMaterial = new THREE.MeshBasicMaterial wireframe: yes
+		latLng = new THREE.Mesh new THREE.SphereGeometry(radius * 1.01, 36, 18), latLngMaterial
+
+		# planet.add surface
+		planet.add latLng
 		planet.computeBoundingSphere = ->
 		planet.boundingSphere = {radius}
 
