@@ -1,9 +1,10 @@
 define ["util/camera", "util/renderer", "game/clock", "util/stats"], (Camera, Renderer, Clock, stats)->
-	Stage = (selector)->
-		FPS = 60
-		$container = $ selector
+	class Stage
+		constructor: (selector)->
+			FPS = 60
+			$container = $ selector
+			@running = no
 
-		prep = ->
 			# Resize the stage to the current container bounds
 			do size = =>
 				@width = $container.width()
@@ -37,7 +38,3 @@ define ["util/camera", "util/renderer", "game/clock", "util/stats"], (Camera, Re
 
 			# attach the render-supplied DOM element
 			$container.append @renderer.domElement
-
-			@
-
-		prep.call running: no
