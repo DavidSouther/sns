@@ -22,7 +22,7 @@ define ["game/clock", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 
 			scene.add new THREE.AmbientLight 0xE0E0E0
 
-			orbital = Orbital orbit, 0, 90 * 60 * 2 * Math.PI, 9 * 6
+			orbital = new THREE.Orbital orbit, [0, 90 * 60 * 2 * Math.PI, 9 * 6]
 			scene.add orbital
 
 			scene.addShip = (ship)->
@@ -39,7 +39,7 @@ define ["game/clock", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 			stage.controls = new THREE.ChaseControls stage.camera, stage.container
 			stage.controls.chase = earth
 
-			$ ->
+			# $ ->
 			# 	cf = dat.addFolder "Pause"
 			# 	cf.add clock, 'pause'
 
@@ -50,7 +50,7 @@ define ["game/clock", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 			BASE = 1
 
 			altitude = (1 + 0.062) * BASE
-			orbit = Orbit({reference: vec(0, 1, 0).normalize()}, null, Orbit.parts(0.5, altitude, 0.0, 0.0, 0.0))
+			orbit = new Orbit({reference: vec(0, 1, 0).normalize(), position: vec(0, 0, 0)}, null, Orbit.parts(0.5, altitude, 0.0, 0.0, 0.0))
 			stage.camera.position = vec 55, 0, 0
 
 			setUp stage, BASE, orbit

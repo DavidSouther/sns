@@ -1,68 +1,68 @@
 define [], ()->
-	# body has .reference (vec3 identity)
+	# body has .reference (vec3 identity), .position (vec3)
 	# body, craft have .mass (scalar)
 	# craft has velocity
 	# orbit should usually come from "parts", it's cleaner.
-	Orbit = (body, craft, orbit)->
-		Q = new THREE.Quaternion()
-		velocity = 0
-		N = 0
+	class THREE.Orbit
+		constructor: (@body, @craft, orbit)->
+			Q = new THREE.Quaternion()
+			velocity = 0
+			N = 0
 
-		closed = (t)->
-			# Calculate theta on perfect circle
-			s = t * velocity
-			# Get cartesian points from perfect circle
-			y = Math.cos s
-			x = Math.sin s
+			@closed = (t)->
+				# Calculate theta on perfect circle
+				s = t * velocity
+				# Get cartesian points from perfect circle
+				y = Math.cos s
+				x = Math.sin s
 
-			# Calculate radius at this point
-			q = 1 + orbit.eccentricity * x
-			r = N / q
-			# Project onto XZ plane
-			pos = vec(r * x, 0, r * y)
-			pos.applyQuaternion closed.reference
+				# Calculate radius at this point
+				q = 1 + orbit.eccentricity * x
+				r = N / q
+				# Project onto XZ plane
+				pos = vec(r * x, 0, r * y)
+				pos.applyQuaternion @reverse
 
-			# Cheat on the velocity vector by calling closed with a step
+				# Cheat on the velocity vector by calling closed with a step
 
-			pos
+				pos
 
-		do closed.calcReference = ->
-			# Calculate the reference plane for this orbit.
-			# The reference plane goes through the origin, with a normal given by closed.reference
-			# The normal starts pointing "due north"
-			# We then rotate the reference frame around the vertical (y) axis to longitude,
-			# the horizontal (z) axis to inclination, and again around the (new) vertical (y) axis to periapsis.
-			closed.reference = Q.setFromEuler(vec(orbit.longitude, orbit.inclination, orbit.periapsis), "yzy")
-			closed.reference.inverse()
+			do @calcReference = =>
+				# Calculate the reference plane for this orbit.
+				# The reference plane goes through the origin, with a normal given by closed.reference
+				# The normal starts pointing "due north"
+				# We then rotate the reference frame around the vertical (y) axis to longitude,
+				# the horizontal (z) axis to inclination, and again around the (new) vertical (y) axis to periapsis.
+				@reference = Q.setFromEuler(vec(orbit.longitude, orbit.inclination, orbit.periapsis), "yzy")
+				@reverse = @reference.clone().inverse()
 
-			eccentricitySquared = orbit.eccentricity * orbit.eccentricity
-			semimajor = orbit.altitude / (1 - orbit.eccentricity)
-			N = semimajor * (1 - eccentricitySquared)
-			velocity = (2 * Math.PI) / (orbit.period * 60)
+				eccentricitySquared = orbit.eccentricity * orbit.eccentricity
+				semimajor = orbit.altitude / (1 - orbit.eccentricity)
+				N = semimajor * (1 - eccentricitySquared)
+				velocity = (2 * Math.PI) / (orbit.period * 60)
 
-		listeners = []
-		closed.listen = (f)->
-			listeners.push f
+			listeners = []
+			@listen = (f)->
+				listeners.push f
 
-		do closed.watch = ->
-			folder = dat.addFolder "Orbit"
-			parts = 
-				eccentricity: [0, 1]
-				altitude: [1, 2]
-				longitude: [0, 2 * Math.PI]
-				inclination: [0, 2 * Math.PI]
-				periapsis: [0, 2 * Math.PI]
-				# period: [0, 120]
-			for param, range of parts
-				controller = folder.add(orbit, param, range[0], range[1])
-				controller.onChange ->
-					closed.calcReference()
-					listen() for listen in listeners
-					return
-			closed
+			do @watch = =>
+				folder = dat.addFolder "Orbit"
+				parts =
+					eccentricity: [0, 1]
+					altitude: [1, 2]
+					longitude: [0, 2 * Math.PI]
+					inclination: [0, 2 * Math.PI]
+					periapsis: [0, 2 * Math.PI]
+					# period: [0, 120]
+				for param, range of parts
+					controller = folder.add(orbit, param, range[0], range[1])
+					controller.onChange ->
+						@calcReference()
+						listen() for listen in listeners
+						return
+				@
 
 
-		closed
 
 	# orbit has eccentricity (>=0), altitude, inclination (rad), longitude (rad), periapsis (rad)
 	# Eccentricity: Elongates the ellipse. 0 = circle, 0 < e < 1 = ellipse, >=1 = escape trajectory
@@ -71,7 +71,8 @@ define [], ()->
 	# Longitude: angle Longitude East of reference on equator.
 	# Periapsis: angle along orbit at epoch (follow inclination from longitude.)
 	# Period: time in (game) minutes to complete one orbit
-	Orbit.parts = (eccentricity, altitude, inclination, longitude, periapsis, period = 90)->
+	THREE.Orbit.parts = (eccentricity, altitude, inclination, longitude, periapsis, period = 90)->
 		{eccentricity, altitude, inclination, longitude, periapsis, period}
 
-	Orbit
+
+	THREE.Orbit
