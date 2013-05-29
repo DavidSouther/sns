@@ -1,4 +1,4 @@
-define ["util/camera", "util/renderer", "game/clock", "util/stats"], (Camera, Renderer, Clock, stats)->
+define ["util/camera", "util/renderer", "game/clock", "util/control/click", "util/stats"], (Camera, Renderer, Clock, Click, stats)->
 	class Stage
 		constructor: (selector)->
 			FPS = 60
@@ -36,5 +36,10 @@ define ["util/camera", "util/renderer", "game/clock", "util/stats"], (Camera, Re
 			@start = -> @running = yes
 			@stop = -> @running = no
 
+			@clicked = (intersects)->
+				for intersect in intersects
+					intersect.object.onclick? intersect
+
 			# attach the render-supplied DOM element
 			$container.append @renderer.domElement
+			new Click $container,  @

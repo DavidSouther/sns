@@ -41,3 +41,5 @@ define [], ()->
 			@add new THREE.Line @geos.line, materials.line
 			@add new THREE.Line @geos.ref, materials.reference, THREE.LinePieces
 
+		onclick: (intersection)->
+			@orbit.theta intersection.point

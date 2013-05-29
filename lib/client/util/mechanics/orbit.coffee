@@ -62,6 +62,12 @@ define [], ()->
 						return
 				@
 
+		theta: (point)->
+			point.applyQuaternion @reference
+			r = point.length()
+			theta = Math.acos(point.x / r)
+			theta = Math.asin(point.z / r)
+			console.log "Click on the orbit at ", theta
 
 
 	# orbit has eccentricity (>=0), altitude, inclination (rad), longitude (rad), periapsis (rad)
