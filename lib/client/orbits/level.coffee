@@ -2,7 +2,7 @@ define ["util/stage", "util/mechanics/orbit", "util/mechanics/orbital", "orbits/
 	(Stage, Orbit, Orbital, Egg)->
 		controls = update: ->
 		setUp = (stage, orbits)->
-			scene = stage.scene = new THREE.Scene
+			scene = stage.scenes[0]
 
 			height = 0
 			for orbit in orbits
