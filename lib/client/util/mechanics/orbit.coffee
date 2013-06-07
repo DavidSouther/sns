@@ -3,18 +3,53 @@ define [], ()->
 	# body, craft have .mass (scalar)
 	# craft has velocity
 	# orbit should usually come from "parts", it's cleaner.
+<<<<<<< Updated upstream
+	Orbit = (body, craft, orbit)->
+		# Calculate the reference plane for this orbit.
+		reference = body.reference.clone().applyEuler(vec(-orbit.periapsis, orbit.inclination, -orbit.longitude), "zxz")
+		eccentricitySquared = orbit.eccentricity * orbit.eccentricity
+		N = orbit.semimajor * (1 - eccentricitySquared)
+		velocity = (2 * Math.PI) / (orbit.period * 60)
+
+		closed = (t)->
+			s = t
+			s = t * velocity
+			y = Math.cos s
+			x = Math.sin s
+
+			q = 1 + orbit.eccentricity * x
+			r = N / q
+			pos = vec(r * x, 0, r * y).applyEuler(reference)
+
+			# Cheat on the velocity vector by calling closed with a step
+
+			pos
+		closed
+
+	# orbit has eccentricity (>=0), altitude, inclination (rad), longitude (rad), periapsis (rad)
+	# Eccentricity: Elongates the ellipse. 0 = circle, 0 < e < 1 = ellipse, >=1 = escape trajectory
+	# Altitude: height of craft at epoch (t=0).
+	# Inclination: angle N of due east on equator at epoch.
+	# Longitude: angle Longitude East of reference on equator.
+	# Periapsis: angle along orbit at epoch (follow inclination from longitude.)
+	# Perior: time in (game) minutes to complete one orbit
+	Orbit.parts = (eccentricity, altitude, inclination, longitude, periapsis, period = 90)->
+		semimajor = altitude / (1 - eccentricity)
+		{eccentricity, semimajor, inclination, longitude, periapsis, period}
+
+	Orbit
+=======
 	class THREE.Orbit
 		constructor: (@body, @craft, @params)->
 			listeners = []
 			@listen = (f)->
 				listeners.push f
 
+			{@reference, @reverse, @N, @velocity} = @params
+
 			if not @params.reference
 				@calcReference()
 				@params.velocity ?= 1
-			else
-				@reference = @params.reference
-				@reverse = @params.reverse
 			@params.velocity = 1
 
 			# do @watch = =>
@@ -36,10 +71,10 @@ define [], ()->
 
 		closed: (t)->
 			# Calculate theta on perfect circle
-			s = t #* @params.velocity # TODO correct for actual velocity
+			s = t * @params.velocity # TODO correct for actual velocity
 			# Get cartesian points from perfect circle
-			y = Math.sin s
-			x = Math.cos s
+			y = Math.cos s
+			x = Math.sin s
 
 			# Calculate radius at this point
 			q = 1 + @params.eccentricity * x
@@ -84,11 +119,9 @@ define [], ()->
 	THREE.Orbit.parts = (eccentricity, altitude, inclination, longitude, periapsis, period = 90)->
 		{eccentricity, altitude, inclination, longitude, periapsis, period}
 
-	###
-	Given three 
-	###
-	THREE.Orbit.fromPoints = (a, b, c, center)->
-		params = Solvers.find.plane.ellipse(a, b, c, center)
-		params
+	THREE.Orbit.fromPoints = (a, b, c)->
+		orbit = Solvers.find.planeEllipse(a, b, c)
+		orbit
 
 	THREE.Orbit
+>>>>>>> Stashed changes
