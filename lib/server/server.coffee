@@ -11,6 +11,11 @@ app = express()
 # HACK for plugins.
 app.get '/text.js', (r, s)-> s.sendfile './lib/client/vendor/text.js'
 
+app.get '/vendor/d3/d3.v3.js',
+	(r, s)->
+		s.charset = "UTF8"
+		s.sendfile './lib/client/vendor/d3/d3.v3.js'
+
 # Serve main entry point files
 require("./index")(app)
 
