@@ -2,7 +2,6 @@ window.d3d = selection = (root)->
 	_selection = []
 	_data = []
 
-
 	set = (object, path, value)->
 		path = path.split('.')
 		for i in [0 ... path.length-1]
@@ -10,6 +9,8 @@ window.d3d = selection = (root)->
 		object[path[i]] = value
 
 	selected =
+		enter: ->
+			selected
 		data: (dataArray)->
 			_data = dataArray
 			selected
@@ -31,13 +32,18 @@ window.d3d = selection = (root)->
 window.d3d.build =
 	Sphere: ->
 		geo = new THREE.SphereGeometry(0.2, 18, 9)
-		mat = new THREE.MeshPhongMaterial()
+		mat = new THREE.MeshLambertMaterial()
 		child = new THREE.Mesh geo, mat
 		sphere = {child}
+		Object.defineProperty sphere, 'ambient',
+			get: -> mat.ambient
+			set: (v)->
+				mat.ambient.setHex v
+				child
 		Object.defineProperty sphere, 'color',
 			get: -> mat.color
 			set: (v)->
-				mat.color = v
+				mat.color.setHex v
 				child
 		Object.defineProperty sphere, 'position',
 			get: -> child.position
@@ -47,4 +53,5 @@ window.d3d.build =
 		sphere
 
 	PointLight: ->
-		light = new THREE.PointLight()
+		new THREE.Object3D
+		# light = new THREE.PointLight()
