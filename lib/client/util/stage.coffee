@@ -1,6 +1,10 @@
 define ["util/camera", "util/renderer", "game/clock", "util/control/click", "util/stats"], (Camera, Renderer, Clock, Click, stats)->
 	class Stage
 		constructor: (selector)->
+			# Public params
+			@running = @camera = @renderer = @container = @scenes = undefined
+			@start = @stop = @clicked = ->
+
 			FPS = 60
 			$container = $ selector
 			@running = no
@@ -39,6 +43,9 @@ define ["util/camera", "util/renderer", "game/clock", "util/control/click", "uti
 			@clicked = (intersects)->
 				for intersect in intersects
 					intersect.object.onclick? intersect
+
+			@scenes = [ new THREE.Scene() ]
+			@scene = @scenes[0]
 
 			# attach the render-supplied DOM element
 			$container.append @renderer.domElement

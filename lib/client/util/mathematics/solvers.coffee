@@ -31,77 +31,33 @@ find =
 			reference = find.plane.rotation(a, b)
 			reverse = reference.clone().inverse()
 
-			# Project the vectors onto the plane.
-			center2 = center.applyQuaternion(reverse)
-			d = center2.x
+			points = [a, b, c]
+			fReverse = (p)-> p.applyQuaternion(reverse)
+			fTwoD = (p)-> vec(p.x, p.z)
+			fReverse(center)
+			_(points).map(fReverse).map(fTwoD)#.map(fCenter)
 
-			a3 = a.applyQuaternion(reverse)
-			b3 = b.applyQuaternion(reverse)
-			c3 = c.applyQuaternion(reverse)
-
-			a2 = vec(a3.x + d, a3.z)
-			b2 = vec(b3.x + d, b3.z)
-			c2 = vec(c3.x + d, c3.z)
-
-			{semimajor, eccentricity, altitude} = find.ellipse(a2, b2, c2)
+			{semimajor, eccentricity, altitude} = find.ellipse(points)
 
 			N = semimajor * (1 - (eccentricity * eccentricity))
 
 			{reference, reverse, eccentricity, N}
 
 	###
-	Given an NxM matrix, convert to upper-right trangular form.
-	@param {elements} Array of length N, each element being an array of length M. THIS ARRAY WILL BE MODIFIED.
-	@return the modified array.
-	@reference https://github.com/jcoglan/sylvester/blob/bb0a1e7cbe6a6ac875f30865fade74fd4c71f975/src/matrix.js toRightTriangular()::279
-	###
-	rightTriangular: (elements)->
-		k = n = elements.length
-		kp = elements[0].length
-		loop
-			i = k - n
-			if elements[i][i] is 0
-				j = i + 1
-				while j < k
-					unless elements[j][i] is 0
-						els = []
-						np = kp
-						loop
-							p = kp - np
-							els.push elements[i][p] + elements[j][p]
-							break unless --np
-						elements[i] = els
-						break
-					j++
-			unless elements[i][i] is 0
-				j = i + 1
-				while j < k
-					multiplier = elements[j][i] / elements[i][i]
-					els = []
-					np = kp
-					loop
-						p = kp - np
-						
-						# Elements with column numbers up to an including the number
-						# of the row that we're subtracting can safely be set straight to
-						# zero, since that's the point of this routine and it avoids having
-						# to loop over and correct rounding errors later
-						els.push (if p <= i then 0 else elements[j][p] - elements[i][p] * multiplier)
-						break unless --np
-					elements[j] = els
-					j++
-			break unless --n
-		elements
-
-	###
 	Given three 2D points on an ellipse with a center at `(0, 0)`, find the eccentricity
 	of the ellipse and the altitude at the closest approach.
 	###
-	ellipse: (a, b, c)->
+	ellipse: (points)->
 		# Solution to Ellipse equation
 		# eg the system Ax^2 + By^2 + 2Cxy = 1 for the three points.
-		E = solve.equations a, b, c
-		S = solve.matrix E
+		coefficients = [
+			(p)-> p.x * p.x
+			(p)-> p.y * p.y
+			(p)-> 2 * p.x * p.y
+			-> 1
+		]
+		[E, X] = solve.equations points, coefficients
+		S = numeric.solve E, X
 
 		# Get determinant pieces out of solution
 		L = solve.quadraticDet S
@@ -121,39 +77,14 @@ find =
 solve =
 	find: find
 	###
-	Return a matrix of `[A|b]` for the ellipse equation `A x^2 + B y^2 + 2Cxy = 1` in three points of `R^2`
+	Return the matricies of `[A|b]` for several points (N) and a set of coeeficient equations (N + 1),
+	where A[i][j] is the jth coeefficient applied to the ith point.
 	###
-	equations: (x, y, z)->
-		ax2 = x.x * x.x
-		ay2 = x.y * x.y
-		axy = x.x * x.y * 2
-
-		bx2 = y.x * y.x
-		by2 = y.y * y.y
-		bxy = y.x * y.y * 2
-
-		cx2 = z.x * z.x
-		cy2 = z.y * z.y
-		cxy = z.x * z.y * 2
-
-		[[ax2, ay2, axy, 1]
-		 [bx2, by2, bxy, 1]
-		 [cx2, cy2, cxy, 1]]
-
-	###
-	Given a matrix of the form `[A|b]`
-	where `A` is an `N` by `N` matrix of coefficients for equations in `N` unknowns, and 
-	`b` is an `N` length column vector with the solutions for those equations, return the
-	row vector
-	###
-	matrix: (equations)->
-		find.rightTriangular equations
-
-		sol_z = equations[2][3] / equations[2][2]
-		sol_y = (equations[1][3] - equations[1][2]*sol_z) / equations[1][1]
-		sol_x = (equations[0][3] - equations[0][2]*sol_z - equations[0][1]*sol_y) / equations[0][0]
-
-		[sol_x, sol_y, sol_z]
+	equations: (points, coefficients)->
+		E = (coefficient(point) for coefficient in coefficients for point in points)
+		X = (e[E.length] for e in E)
+		e.length = E.length for e in E
+		[E, X]
 
 	###
 	Return the two real solutions of x to the quadratic `ax^2 + bx + c`

@@ -5,7 +5,7 @@ THREE.Raycaster::intersectObjects = ( objects, recursive )->
 	intersects = []
 
 	for object in objects
-		if object instanceof THREE.Orbital
+		if THREE.Orbital and object instanceof THREE.Orbital
 			# Calculate point on plane intersection
 			plane =
 				normal: vec(0, 1, 0).applyQuaternion object.orbit.reference
