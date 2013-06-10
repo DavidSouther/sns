@@ -41,7 +41,7 @@ define [], ()->
 				h = ((theta / tau)) / 3 + 0.25
 				color = (new THREE.Color()).setHSL(h, 0.5, 0.5)
 
-				console.log vert, color
+				# console.log vert, color
 
 				@geos.dots.colors.push color
 				@geos.line.colors.push color

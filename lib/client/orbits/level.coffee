@@ -42,7 +42,7 @@ define ["util/stats", "util/mechanics/orbit", "util/mechanics/orbital", "orbits/
 					orbits[0].closed(Math.PI / 8)
 					orbits[0].closed(Math.PI / 4)
 					vec(0, 0, 0)
-
+				)
 				orbits.push new Orbit(object, null, params)
 				orbits[1].color = 0x0000FF
 

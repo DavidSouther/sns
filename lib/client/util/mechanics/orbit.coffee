@@ -70,7 +70,7 @@ define [], ()->
 			r = point.length()
 			theta = Math.acos(point.x / r)
 			theta = Math.asin(point.z / r)
-			console.log "Click on the orbit at ", theta
+			# console.log "Click on the orbit at ", theta
 
 	###
 	orbit has eccentricity (>=0), altitude, inclination (rad), longitude (rad), periapsis (rad)
@@ -88,7 +88,7 @@ define [], ()->
 	Given three 
 	###
 	THREE.Orbit.fromPoints = (a, b, c, center)->
-		params = Solvers.find.plane.ellipse(a, b, c, center)
+		params = Solvers.find.plane.ellipse([a, b, c], center)
 		params
 
 	THREE.Orbit

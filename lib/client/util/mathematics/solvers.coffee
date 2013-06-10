@@ -27,21 +27,22 @@ find =
 			)).normalize()
 			Q
 
-		ellipse: (a, b, c, center = vec(0, 0, 0))->
-			reference = find.plane.rotation(a, b)
-			reverse = reference.clone().inverse()
 
-			points = [a, b, c]
-			fReverse = (p)-> p.applyQuaternion(reverse)
-			fTwoD = (p)-> vec(p.x, p.z)
-			fReverse(center)
-			_(points).map(fReverse).map(fTwoD)#.map(fCenter)
+		ellipse: (points, focus = vec(0, 0, 0))->
+			params =
+				reference: find.plane.rotation(points[0], points[1])
+			params.reverse = params.reference.clone().inverse()
 
-			{semimajor, eccentricity, altitude} = find.ellipse(points)
+			fns =
+				reverse: (p)-> p.applyQuaternion(params.reverse)
+				plane: (p)-> vec(p.x, p.z)
 
-			N = semimajor * (1 - (eccentricity * eccentricity))
+			_(params).extend find.ellipse _(points).map(fns.reverse).map(fns.plane)#.map(fns.focus))
 
-			{reference, reverse, eccentricity, N}
+
+			params.N = params.semimajor * (1 - (params.eccentricity * params.eccentricity))
+
+			params
 
 	###
 	Given three 2D points on an ellipse with a center at `(0, 0)`, find the eccentricity
