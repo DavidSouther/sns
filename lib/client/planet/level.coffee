@@ -1,8 +1,8 @@
-define ["util/stage", "game/clock", "util/mechanics/orbit", "planet/geometry", "planet/galaxy", "util/mechanics/orbital", "ship/ship"],
-	(Stage, Clock, Orbit, Geometry, Galaxy, Orbital, Ship)->
+define ["game/clock", "util/mechanics/orbit", "planet/geometry", "planet/galaxy", "util/mechanics/orbital", "ship/ship"],
+	(Clock, Orbit, Geometry, Galaxy, Orbital, Ship)->
 		controls = update: ->
 		setUp = (stage, base, orbit)->
-			scene = stage.scene = new THREE.Scene
+			scene = stage.scene
 			clock = new Clock
 
 			radii = 
@@ -47,7 +47,7 @@ define ["util/stage", "game/clock", "util/mechanics/orbit", "planet/geometry", "
 				cf.add clock, 'pause'
 
 		play: (selector)->
-			stage = Stage selector
+			stage = new S3age selector
 
 			BASE = 50
 
