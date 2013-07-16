@@ -65,11 +65,24 @@ define [], ()->
 			@params.N = @params.semimajor * (1 - eccentricitySquared)
 			@params.velocity = (2 * Math.PI) / (@params.period * 60)
 
+			###
+			Store the (x, y, z) position of the center of the ellipse, assuming one focus is at <0, 0, 0>
+			and the ellipse extends along the positive x axis
+			###
+			distance = @params.eccentricity * @params.semimajor
+			@center = (new THREE.Vector3(1, 0, 0)).multiplyScalar(distance).applyQuaternion(@reverse)
+
+			@
+
+		###
+		Given a point in 3-space, find the theta that minimizes the distance from the ellipse to the point.
+		###
 		theta: (point)->
 			point.applyQuaternion @reference
 			r = point.length()
 			theta = Math.acos(point.x / r)
 			theta = Math.asin(point.z / r)
+			# TODO combine these
 			# console.log "Click on the orbit at ", theta
 
 	###

@@ -11,24 +11,26 @@ find =
 			N = a.clone().cross b
 			N.normalize()
 
+
+
 			# Find the angle between the reference and the normal
 			R = reference.normalize()
-			
-			A = R.clone().cross(N)
 			theta = Math.acos(R.clone().dot(N))
-
-			h_theta = theta / 2
-			A.multiplyScalar(Math.sin(h_theta))
+			A = R.clone().cross(N)
 
 			# The (shortest) rotation between reference and normal.
+			h_theta = theta / 2
+			A.multiplyScalar(Math.sin(h_theta))
 			Q = (new THREE.Quaternion(
 				Math.cos(h_theta),
 				A.x, A.y, A.z
 			)).normalize()
 			Q
 
-
-		ellipse: (points, focus = vec(0, 0, 0))->
+		###
+		Given three 
+		###
+		ellipse: (points, center = vec(0, 0, 0))->
 			params =
 				reference: find.plane.rotation(points[0], points[1])
 			params.reverse = params.reference.clone().inverse()
@@ -36,9 +38,12 @@ find =
 			fns =
 				reverse: (p)-> p.applyQuaternion(params.reverse)
 				plane: (p)-> vec(p.x, p.z)
+				focus: (p)-> p.add(center)
 
-			_(params).extend find.ellipse _(points).map(fns.reverse).map(fns.plane)#.map(fns.focus))
-
+			points = _(points).map(fns.focus)
+			points = _(points).map(fns.reverse)
+			points = _(points).map(fns.plane)
+			_(params).extend find.ellipse points
 
 			params.N = params.semimajor * (1 - (params.eccentricity * params.eccentricity))
 

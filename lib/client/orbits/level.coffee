@@ -30,7 +30,7 @@ define ["util/stats", "util/mechanics/orbit", "util/mechanics/orbital", "orbits/
 
 			altitude = (1 + 0.062)
 			params = Orbit.parts(0.5, altitude, 0.3, 0.0, 0.0)
-			params = Orbit.parts(0.1, altitude, 0.0, 0.0, 0.0)
+			params = Orbit.parts(0.1, altitude, 0.0, 0.0, 1.0)
 
 			orbits = [
 				new Orbit(object, null, params)
@@ -41,7 +41,7 @@ define ["util/stats", "util/mechanics/orbit", "util/mechanics/orbital", "orbits/
 					orbits[0].closed(0)
 					orbits[0].closed(Math.PI / 8)
 					orbits[0].closed(Math.PI / 4)
-					vec(0, 0, 0)
+					orbits[0].center
 				)
 				orbits.push new Orbit(object, null, params)
 				orbits[1].color = 0x0000FF
