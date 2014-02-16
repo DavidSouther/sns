@@ -1,17 +1,20 @@
+tau = 2 * Math.PI
+hundredth_tau = tau / 100
 define [], ()->
-	tau = 2 * Math.PI
-	hundredth_tau = tau / 100
-	Orbital = (orbit, start = 0, stop = tau, step = hundredth_tau, color = 0xFA1010)->
-		orbital =
-			geometry: new THREE.Geometry()
-			materials:
-				particle: new THREE.ParticleBasicMaterial {color, size: 0.1}
-				line: new THREE.LineBasicMaterial {color}
+	Orbital = class Orbital extends THREE.Object3D
+		constructor: (@orbit, start = 0, stop = tau, step = hundredth_tau, @color = 0xFA1010)->
+			super()
+			@name = "orbital_#{@id}"
+			@geometry = new THREE.Geometry()
+			@materials =
+				particle: new THREE.ParticleBasicMaterial {color: @color, size: 0.1}
+				line: new THREE.LineBasicMaterial {color: @color}
 
-		while start < stop
-			orbital.geometry.vertices.push orbit(start)
-			start += step
+			while start < stop
+				tA = start += step
+				position = @orbit.positionAtTrueAnomaly tA
+				v = (new THREE.Vector3().fromArray(position))
+				@geometry.vertices.push v
 
-		orbital.dots = new THREE.ParticleSystem orbital.geometry.clone(), orbital.materials.particle
-		orbital.line = new THREE.Line orbital.geometry.clone(), orbital.materials.line
-		orbital
+			@add @dots = new THREE.ParticleSystem @geometry.clone(), @materials.particle
+			@add @line = new THREE.Line @geometry.clone(), @materials.line

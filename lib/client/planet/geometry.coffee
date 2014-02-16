@@ -1,29 +1,28 @@
-define [], ()->
-	Sphere: (radius, texture, bump, clouds)->
-		# set up the sphere vars
-		segments = 16 * 6
-		rings = 16 * 4
+define ['util/mechanics/body'], (CelestialBody)->
+	Planet = class Planet extends CelestialBody
+		constructor: (name, @mass, @radius, @siderealRotation,
+			@orbit, @atmPressure,
+			@texture, @bump, @clouds
+		)->
+			super(@mass, @radius, @siderealRotation, @orbit, @atmPressure)
+			@name = name
 
-		planet = new THREE.Object3D()
+			# set up the sphere vars
+			segments = 16 * 6
+			rings = 16 * 4
 
-		surfaceMaterial = new THREE.MeshPhongMaterial map: THREE.ImageUtils.loadTexture texture
-		surfaceMaterial.bumpMap = THREE.ImageUtils.loadTexture bump unless not bump
-		surface = new THREE.Mesh new THREE.SphereGeometry(radius, segments, rings), surfaceMaterial
+			surfaceMaterial = new THREE.MeshPhongMaterial map: THREE.ImageUtils.loadTexture texture
+			surfaceMaterial.bumpMap = THREE.ImageUtils.loadTexture bump unless not bump
+			surface = new THREE.Mesh new THREE.SphereGeometry(radius, segments, rings), surfaceMaterial
+			surface.name = "#{@name}_suface"
 
-		planet.add surface
-		planet.computeBoundingSphere = ->
-		planet.boundingSphere = {radius}
+			@add surface
+			@computeBoundingSphere = ->
+			@boundingSphere = {@radius}
 
-		planet.timeScale = 15
+			@timeScale = 15
 
-		planet.update = (t)->
-			s = t.time
-			# The planet must go from 0 to 2PI in 24 * 60 * 60 game-time seconds
-			# q = (2 * Math.PI) / (24 * 60 * 60)
-			q = 0.0000727220521664304
-			s = s * q * planet.timeScale
+			@update = (t)=>
+				@rotation = vec 0, @siderealTimeAt(0, t), 0
 
-			planet.rotation = vec 0, s, 0
-
-		planet
-
+	Planet

@@ -1,6 +1,6 @@
 ## Laregely taken from https://github.com/alexmoon/ksp
 
-define [], ()->
+define ['util/mechanics/body'], (CelestialBody)->
 	# Utility functions and constants
 	TWO_PI = 2 * Math.PI
 	HALF_PI = 0.5 * Math.PI
@@ -170,7 +170,7 @@ define [], ()->
 				E = @eccentricAnomalyAt(t)
 				tA = 2 * Math.atan2(Math.sqrt(1 + e) * Math.sin(E / 2), Math.sqrt(1 - e) * Math.cos(E / 2))
 				if tA < 0 then tA + TWO_PI else tA
-			
+
 		# Orbital state at true anomaly
 		
 		eccentricAnomalyAtTrueAnomaly: (tA) ->
@@ -217,7 +217,7 @@ define [], ()->
 		positionAtTrueAnomaly: (tA) ->
 			r = @radiusAtTrueAnomaly(tA)
 			quaternion.rotate(@rotationToReferenceFrame(), [r * Math.cos(tA), r * Math.sin(tA), 0])
-			
+
 		velocityAtTrueAnomaly: (tA) ->
 			mu = @referenceBody.gravitationalParameter
 			e = @eccentricity

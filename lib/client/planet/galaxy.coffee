@@ -18,5 +18,6 @@ define [], ()->
 
 		skybox = new THREE.Mesh new THREE.CubeGeometry( 10000, 10000, 10000 ), material
 		skybox.flipSided = true
+		skybox.name = "skybox_#{skybox.id}"
 
 		skybox

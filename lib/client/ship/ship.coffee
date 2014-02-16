@@ -8,13 +8,16 @@ define [], ()->
 				do (mesh)->
 					mat = new THREE.Matrix4()
 					mesh.scale = vec 0.01, 0.01, 0.01
+					position = new THREE.Vector3
+					velocity = new THREE.Vector3
 
 					mesh.update = (clock)->
-						time = clock.time
+						time = clock.now
 						delta = clock.delta
-						position = orbit time
-						velocity = orbit (time + delta)
-						mesh.position = position
+						tA = orbit.trueAnomalyAt time
+						tAD = orbit.trueAnomalyAt time + delta
+						mesh.position.fromArray orbit.positionAtTrueAnomaly tA
+						velocity.fromArray orbit.positionAtTrueAnomaly tAD
 
 						# Point the top of the ship back at the planet
 						mesh.up = mesh.position.clone().normalize().negate()

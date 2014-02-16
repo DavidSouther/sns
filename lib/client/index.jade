@@ -7,14 +7,14 @@ html(lang="en")
 		script(src="vendor/underscore.js")
 		script(src="vendor/zepto.js")
 		script(src="vendor/numeric.js")
+		script(src="vendor/quaternion.js")
 
 		script(src="vendor/dat.gui.js")
 		script
 			$(function(){window.dat = new dat.GUI();})
 
 		script(src="vendor/three.js")
-		script(src="vendor/detector.js")
-		script(src="vendor/stats.js")
+		script(src="vendor/s3age.js")
 
 		script(src="vendor/three/loaders/Collada.js")
 
@@ -26,5 +26,7 @@ html(lang="en")
 		script(type="text/javascript")
 			var stage = '#{stage}';
 		script(data-main="main.js", src="vendor/require.js")
+
 	body
 		#simulator
+

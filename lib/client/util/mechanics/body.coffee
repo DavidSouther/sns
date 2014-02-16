@@ -3,8 +3,9 @@ define [], ()->
 	TWO_PI = 2 * Math.PI
 	HALF_PI = 0.5 * Math.PI
 
-	CelestialBody = class CelestialBody
+	CelestialBody = class CelestialBody extends THREE.Object3D
 		constructor: (@mass, @radius, @siderealRotation, @orbit, @atmPressure) ->
+			super()
 			@gravitationalParameter = G * @mass
 			@sphereOfInfluence = @orbit.semiMajorAxis * Math.pow(@mass / @orbit.referenceBody.mass, 0.4) if @orbit?
 			@atmPressure ?= 0
