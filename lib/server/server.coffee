@@ -1,6 +1,6 @@
 nconf = require "nconf"
 nconf.defaults
-	port: 8000
+    port: 8000
 
 logger = require "./logger"
 express = require "express"
@@ -18,7 +18,9 @@ require("./index")(app)
 app.use assets "./lib/client"
 
 module.exports =
-	serve: ->
-		port = nconf.get "port"
-		app.listen port
-		logger.info "SNS started at http://localhost:#{port}"
+    serve: ->
+        startingPort = nconf.get "port"
+        require('openport')
+        .find {startingPort}, (err, port)->
+            app.listen port
+            logger.info "SNS started at http://localhost:#{port}"
