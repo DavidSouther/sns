@@ -37,20 +37,22 @@ define ["game/clock", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 				@addShip = (ship)=>
 					@add ship
 					@ships.push ship
-					@stage.controls.chase = ship
+					@controls.target = ship
 				Ship.load @, orbit
 
 				@update = (clock)=>
 					(planet.update clock for planet in @planets)
 					(ship.update clock for ship in @ships)
 
-				@controls = @stage.controls = new THREE.ChaseControls @stage.camera, @stage.container
+				@controls = @stage.controls = new S3age.Controls.Sphere @stage, earth
 
 				$ =>
+					cf = dat.addFolder "Speed"
+					cf.add @stage.clock, 'scale', 1, 32
 					cf = dat.addFolder "Follow"
 					follow =
-						ship: => @controls?.chase = @ships[0]
-						earth: => @controls?.chase = earth
+						ship: => @controls.target = @ships[0]
+						earth: => @controls.target = earth
 					cf.add follow, 'ship'
 					cf.add follow, 'earth'
 					cf = dat.addFolder "Pause"
@@ -69,7 +71,7 @@ define ["game/clock", "util/mechanics/orbit", "planet/geometry", "planet/galaxy"
 			orbitParams =
 				semiMajorAxis: 6.38e6 + 2e5
 				eccentricity: 0
-				inclination: 0
+				inclination: Math.PI / 2
 				longitudeOfAscendingNode: 0
 				timeOfPeriapsisPassage: 0
 				meanAnomalyAtEpoch: 0
